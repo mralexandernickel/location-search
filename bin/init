@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+npm init
+
+npm install grunt-contrib-less --save-dev
+npm install grunt-contrib-autoprefixer --save-dev
+npm install grunt-contrib-cssmin --save-dev
+npm install grunt-contrib-coffee --save-dev
+npm install grunt-contrib-uglify --save-dev
+npm install grunt-contrib-copy --save-dev
+npm install grunt-contrib-concat --save-dev
+
+bower install bootstrap
+bower install fontawesome
+bower install jquery.lazyload
+bower install git@github.com:mralexandernickel/toaster.git
+bower install git@bitbucket.org:mralexandernickel/buttons-clean.git
