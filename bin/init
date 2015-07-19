@@ -31,9 +31,9 @@ echo -n "Install Wordpress? (y|n)"
 read wordpress
 if [ "$wordpress" == "y" ]; then
   # download and unzip latest wordpress
-  #wget https://de.wordpress.org/latest-de_DE.zip
-  rm -r public
+  wget https://de.wordpress.org/latest-de_DE.zip
   unzip latest-de_DE.zip
+  rm latest-de_DE.zip
   mv wordpress public
   
   # write wp-config
