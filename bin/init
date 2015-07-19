@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
+
+# generate package.json
 npm init
 
+# be sure these ones are installed and up-to-date
+npm install -g grunt
+npm install -g bower
+npm install -g todo
+
+# TODO check if todo's environment variables are correctly set
+
+# install npm-modules into project
 npm install grunt-contrib-less --save-dev
 npm install grunt-autoprefixer --save-dev
 npm install grunt-contrib-cssmin --save-dev
@@ -9,8 +19,34 @@ npm install grunt-contrib-uglify --save-dev
 npm install grunt-contrib-copy --save-dev
 npm install grunt-contrib-concat --save-dev
 
+# install bower-packages into project
 bower install bootstrap
 bower install fontawesome
 bower install jquery.lazyload
 bower install git@github.com:mralexandernickel/toaster.git
 bower install git@bitbucket.org:mralexandernickel/buttons-clean.git
+
+# optional wordpress
+echo -n "Install Wordpress? (y|n)"
+read wordpress
+if [ "$wordpress" == "y" ]; then
+  # download and unzip latest wordpress
+  #wget https://de.wordpress.org/latest-de_DE.zip
+  rm -r public
+  unzip latest-de_DE.zip
+  mv wordpress public
+  
+  # write wp-config
+  echo '<?php' > public/wp-config.php
+  wget -q -O - "$@" https://api.wordpress.org/secret-key/1.1/salt/ >> public/wp-config.php
+  echo '$table_prefix  = "wp_";' >> public/wp-config.php
+  echo 'if ( !defined("ABSPATH") ) define("ABSPATH", dirname(__FILE__) . "/");' >> public/wp-config.php
+  echo 'require_once(ABSPATH . "wp-config-env.php");' >> public/wp-config.php
+  echo 'require_once(ABSPATH . "wp-settings.php");' >> public/wp-config.php
+  echo '?>' >> public/wp-config.php
+  wget -q https://gist.githubusercontent.com/mralexandernickel/1f9fa23b1de0e047f100/raw/fa4b880bfa5a94822a5be8adf47b2f77409109ed/wp-config-env.php -O public/wp-config-env.php
+
+fi
+
+# exit program
+exit 1
