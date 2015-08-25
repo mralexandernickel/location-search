@@ -1,5 +1,5 @@
-# DEPENDENCIES
+# HOW TO RUN
 
-    npm install grunt -g
-    npm install bower -g
-    npm install todo -g
+Pull this Repository and run this command from your terminal (after you cd'ed into your project)
+
+    ./bin/init
