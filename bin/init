@@ -3,15 +3,12 @@
 # generate package.json
 npm init
 
-# be sure these ones are installed and up-to-date
-npm install -g grunt
-npm install -g bower
-npm install -g todo
-
 # TODO check if todo's environment variables are correctly set
 
 # install npm-modules into project
-npm install grunt-contrib-less --save-dev
+npm install bower --save-dev
+npm install todo --save-dev
+npm install grunt-sass --save-dev
 npm install grunt-autoprefixer --save-dev
 npm install grunt-contrib-cssmin --save-dev
 npm install grunt-contrib-coffee --save-dev
@@ -20,10 +17,11 @@ npm install grunt-contrib-copy --save-dev
 npm install grunt-contrib-concat --save-dev
 
 # install bower-packages into project
-bower install bootstrap
-bower install fontawesome
-bower install jquery.lazyload
-bower install git@github.com:mralexandernickel/toaster.git
+bower install angular
+bower install angular-aria
+bower install angular-animate
+bower install angular-material
+bower install mdi
 bower install git@bitbucket.org:mralexandernickel/buttons-clean.git
 
 # optional wordpress

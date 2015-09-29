@@ -3,67 +3,41 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON "package.json"
     src_path: "src"
-    assets_path: "public/wp-content/themes/rak/assets"
-    haml:
-      training:
-        files:
-          "<%= assets_path %>/training/views/TrainingsIndex.html": ["<%= src_path %>/training/views/TrainingsIndex.haml"]
-          "<%= assets_path %>/training/views/Trainings.html": ["<%= src_path %>/training/views/Trainings.haml"]
-          "<%= assets_path %>/training/views/TrainingsRegistration.html": ["<%= src_path %>/training/views/TrainingsRegistration.haml"]
-      dist:
-        files:
-          "example/index.html": ["<%= src_path %>/haml/index.haml"]
+    assets_path: "public/assets"
     coffee:
       compile:
         files:
-          "<%= assets_path %>/js/<%= pkg.name %>.js": ["<%= src_path %>/coffee/*.coffee"]
-          "<%= assets_path %>/training/controllers.js": ["<%= src_path %>/training/controllers/*.coffee"]
-          "<%= assets_path %>/training/routes.js": ["<%= src_path %>/training/routes/*.coffee"]
-    less:
-      development:
-        options:
-          paths: [
-            "<%= src_path %>/lib/bootstrap/less",
-            "<%= src_path %>/lib/fontawesome/less",
-            "<%= src_path %>/lib/less-easing/less",
-            "<%= src_path %>/lib/less-grayscale/less",
-            "<%= src_path %>/less"
-          ]
-        files:
-          "<%= assets_path %>/css/<%= pkg.name %>.css": "<%= src_path %>/less/application.less"
-    concat:
-      bootstrap:
-        src: [
-          "<%= src_path %>/lib/bootstrap/js/transition.js",
-          "<%= src_path %>/lib/bootstrap/js/tooltip.js",
-          "<%= src_path %>/lib/bootstrap/js/affix.js",
-          "<%= src_path %>/lib/bootstrap/js/alert.js",
-          "<%= src_path %>/lib/bootstrap/js/button.js",
-          "<%= src_path %>/lib/bootstrap/js/carousel.js",
-          "<%= src_path %>/lib/bootstrap/js/collapse.js",
-          "<%= src_path %>/lib/bootstrap/js/dropdown.js",
-          "<%= src_path %>/lib/bootstrap/js/modal.js",
-          "<%= src_path %>/lib/bootstrap/js/popover.js",
-          "<%= src_path %>/lib/bootstrap/js/scrollspy.js",
-          "<%= src_path %>/lib/bootstrap/js/tab.js"
+          "<%= assets_path %>/app/controllers.js": ["<%= src_path %>/app/controllers/*.coffee"]
+          "<%= assets_path %>/app/config.js": ["<%= src_path %>/app/config/*.coffee"]
+    sass:
+      options:
+        sourceMap: true
+        includePaths: [
+          "<%= src_path %>/sass"
         ]
-        dest: "<%= assets_path %>/lib/bootstrap/bootstrap.js"
+      dist:
+        files:
+          "<%= assets_path %>/css/<%= pkg.name %>.css": "<%= src_path %>/sass/application.sass"
     copy:
-      main:
+      images:
         files: [
           {expand: true, flatten: true, src: ["<%= src_path %>/img/*"], dest: "<%= assets_path %>/img", filter: 'isFile'}
         ]
-      fonts:
+      mdi:
         files: [
-          {expand: true, flatten: true, src: ["<%= src_path %>/lib/fontawesome/fonts/*"], dest: "<%= assets_path %>/fonts", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/mdi/fonts/*"], dest: "<%= assets_path %>/fonts", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/mdi/css/*"], dest: "<%= assets_path %>/css", filter: 'isFile'}
         ]
-      toaster:
+      angular:
         files: [
-          {expand: true, flatten: true, src: ["<%= src_path %>/lib/toaster/dist/*"], dest: "<%= assets_path %>/lib/toaster", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-material/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-aria/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-animate/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
         ]
-      grayscsale:
+      views:
         files: [
-          {expand: true, flatten: true, src: ["<%= src_path %>/lib/less-grayscale/filter/*"], dest: "<%= assets_path %>/filter", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/app/views/*.html"], dest: "<%= assets_path %>/app/views", filter: 'isFile'}
         ]
     autoprefixer:
       single_file:
@@ -84,14 +58,20 @@ module.exports = (grunt) ->
           dest: "<%= assets_path %>/css"
           ext: ".min.css"
         ]
+    cucumberjs:
+      files: "features"
+      options:
+        step: "features/step_definitions"
+        format: "pretty"
   
-  grunt.loadNpmTasks "grunt-contrib-haml"
+  grunt.loadNpmTasks "grunt-sass"
   grunt.loadNpmTasks "grunt-contrib-coffee"
-  grunt.loadNpmTasks "grunt-contrib-less"
   grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-copy"
   grunt.loadNpmTasks "grunt-contrib-uglify"
   grunt.loadNpmTasks "grunt-contrib-cssmin"
   grunt.loadNpmTasks "grunt-autoprefixer"
+  grunt.loadNpmTasks "grunt-cucumber"
 
-  grunt.registerTask "default", ["haml","coffee","less","concat","copy"]
+  grunt registerTask "test", ["cucumberjs"]
+  grunt.registerTask "default", ["coffee","sass","copy"]
