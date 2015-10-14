@@ -1,7 +1,0 @@
-.DS_Store
-log/*.log
-node_modules
-.vagrant
-public
-*.swa
-*.swp
