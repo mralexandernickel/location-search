@@ -88,8 +88,10 @@ LocationSearchController = ($scope, $http, $filter) ->
 
   # get the data
   getData = ->
-    $http.get('/data/mitglieder.json').success (d) ->
-      $scope.places = d
+    $http
+      .get "data/mitglieder.json"
+      .success (d) ->
+        $scope.places = d
 
   __construct()
 
