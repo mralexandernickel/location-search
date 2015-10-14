@@ -1,0 +1,11 @@
+<input id="gmapSearch" type="text" ng-model="search" ng-model-options="{debounce: 300}" ng-change="filterPlaces()" placeholder="Search...">
+<ul id="gmapSearchResults" ng-if="results.length > 0">
+  <li ng-repeat="place in results">
+    <address>
+      <strong>{{place.Name_Titel_Beruf}}</strong><br>
+      {{place.Hauptkanzlei_Strasse}}<br>
+      {{place.Hauptkanzlei_PLZ}} {{place.Hauptkanzlei_Ort}}
+    </address>
+  </li>
+</ul>
+<div id="gmapSearchContainer"></div>

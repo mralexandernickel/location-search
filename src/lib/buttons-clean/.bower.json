@@ -1,0 +1,25 @@
+{
+  "name": "buttons-clean",
+  "authors": [
+    "Alexander Nickel <mr.alexander.nickel@gmail.com>"
+  ],
+  "description": "clean and simple button-styles, fully compatible with bootstraps buttons-js-plugin",
+  "main": "less/buttons-clean.less",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "e221a852cb",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e221a852cbbe32480e27e592c779a1db28914213"
+  },
+  "_source": "git@bitbucket.org:mralexandernickel/buttons-clean.git",
+  "_target": "*",
+  "_originalSource": "git@bitbucket.org:mralexandernickel/buttons-clean.git",
+  "_direct": true
+}

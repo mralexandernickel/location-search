@@ -1,9 +1,6 @@
-ApplicationController = ($scope,$mdSidenav) ->
+ApplicationController = ($scope) ->
   __construct = ->
     console.log "application running"
-
-  $scope.toggleSidenav = (menuId) ->
-    $mdSidenav(menuId).toggle()
 
   __construct()
 

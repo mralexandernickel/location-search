@@ -1,0 +1,144 @@
+//
+// Very flexible clean Button-Styles, fully compatible with Bootstraps JS-Button-Plugin
+//
+// @author Alexander Nickel <mr.alexander.nickel@gmail.com>
+// @dependency fontawesome.less <http://fontawesome.io/>
+//
+
+// VARIABLES
+// =========
+@button-color-default: @grey;
+@button-color-primary: @blue;
+@button-text-default: @white;
+@button-text-primary: @white;
+@button-text-hover-default: @white;
+@button-text-hover-primary: @white;
+@button-height: 30px;
+@button-height-sm: 24px;
+@button-height-lg: 40px;
+@button-fontsize: 13px;
+@button-fontsize-sm: 11px;
+@button-fontsize-lg: 13px;
+
+// CLASS DEFINITIONS
+// =================
+.button {
+  display: inline-block;
+  padding: 0 10px;
+  text-transform: uppercase;
+  color: @button-text-default;
+  line-height: @button-height;
+  height: @button-height;
+  border: none;
+  outline: none;
+  font-size: @button-fontsize;
+  text-decoration: none !important;
+  border-radius: 0;
+
+  &.button-lg {
+    line-height: @button-height-lg;
+    height: @button-height-lg;
+    font-size: @button-fontsize-lg;
+  }
+
+  &.button-sm {
+    line-height: @button-height-sm;
+    height: @button-height-sm;
+    font-size: @button-fontsize-sm;
+  }
+
+  &.button-block {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  // button with caret depending on aria-expanded attribute
+  &.button-collapse {
+    &:after {
+      .fa;
+      margin-left: 5px;
+    }
+
+    &[aria-expanded=false] {
+      &:after {
+        content: "\f0d7";
+      }
+    }
+
+    &[aria-expanded=true] {
+      &:after {
+        content: "\f0d8";
+      }
+    }
+  }
+
+  // button with a quarter on the right, holding a caret
+  &.button-chevron-right {
+    position: relative;
+    margin-right: @button-height;
+
+    &:after {
+      .fa;
+      position: absolute;
+      background-color: lighten(@button-color-primary,10%);
+      height: @button-height;
+      line-height: @button-height;
+      left: 100%;
+      width: @button-height;
+      content: "\f054";
+      text-align: center;
+    }
+
+    &.button-sm {
+      margin-right: @button-height-sm;
+      &:after {
+        height: @button-height-sm;
+        line-height: @button-height-sm;
+        width: @button-height-sm;
+      }
+    }
+
+    &.button-lg {
+      margin-right: @button-height-lg;
+      &:after {
+        height: @button-height-lg;
+        line-height: @button-height-lg;
+        width: @button-height-lg;
+      }
+    }
+  }
+
+  &:focus {
+    color: @button-text-default;
+  }
+
+  &.button-back {
+    margin-top: 10px;
+  }
+
+  // button styles - primary
+  &.button-primary, &.button-blue {
+    background: @button-color-primary;
+    color: @button-text-primary;
+
+    &:hover, &.hover {
+      background: darken(@button-color-primary,10%);
+      color: @button-text-hover-primary;
+    }
+  }
+
+  // button style - default
+  &.button-default {
+    background: @button-color-default;
+    color: @button-text-default;
+
+    &:hover, &.hover {
+      background: @button-color-primary;
+      color: @button-text-hover-default;
+    }
+
+    &.active {
+      background: @button-color-primary;
+    }
+  }
+}

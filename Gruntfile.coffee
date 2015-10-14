@@ -34,10 +34,12 @@ module.exports = (grunt) ->
           {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-material/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
           {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-aria/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
           {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-animate/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/lib/angular-route/angular*"], dest: "<%= assets_path %>/lib/angular", filter: 'isFile'}
         ]
       views:
         files: [
           {expand: true, flatten: true, src: ["<%= src_path %>/app/views/*.html"], dest: "<%= assets_path %>/app/views", filter: 'isFile'}
+          {expand: true, flatten: true, src: ["<%= src_path %>/app/views/layouts/*.html"], dest: "public/", rename: (dest,src) -> dest + src.replace("application","index")}
         ]
     autoprefixer:
       single_file:
@@ -58,11 +60,6 @@ module.exports = (grunt) ->
           dest: "<%= assets_path %>/css"
           ext: ".min.css"
         ]
-    cucumberjs:
-      files: "features"
-      options:
-        step: "features/step_definitions"
-        format: "pretty"
   
   grunt.loadNpmTasks "grunt-sass"
   grunt.loadNpmTasks "grunt-contrib-coffee"
@@ -71,7 +68,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-uglify"
   grunt.loadNpmTasks "grunt-contrib-cssmin"
   grunt.loadNpmTasks "grunt-autoprefixer"
-  grunt.loadNpmTasks "grunt-cucumber"
 
-  grunt registerTask "test", ["cucumberjs"]
   grunt.registerTask "default", ["coffee","sass","copy"]
