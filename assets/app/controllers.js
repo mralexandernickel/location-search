@@ -124,7 +124,7 @@
       return $scope.map = new google.maps.Map(document.getElementById("gmapSearchContainer"), mapOptions);
     };
     getData = function() {
-      return $http.get('/data/mitglieder.json').success(function(d) {
+      return $http.get("data/mitglieder.json").success(function(d) {
         return $scope.places = d;
       });
     };
