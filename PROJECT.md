@@ -20,4 +20,4 @@ not responding to anything else... but it did not! Surprisingly, this was perfor
 And so I also implemented the remaining functionality of my search, including GoogleMaps-API and the randomized results...
 still surprised by the very good performance and proud that not even 1 request is hitting our server and database.
 
-I bet you can't believe me, so please see by yourself --> [Demo](http://mralexandernickel.github.io/location-search)
+Can't believe me? Please see by yourself... [mralexandernickel.github.io/location-search](http://mralexandernickel.github.io/location-search)
