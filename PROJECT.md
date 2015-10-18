@@ -1,7 +1,7 @@
 During the development of a project for my employer, I had to implement a search which should filter roundabout 4000 records in total.
-If the given Criteria is returning more than 5 records, I had to return random 5 ones, if it's returning less than 5 records, the order
+If the given criteria is returning more than 5 records, I had to return random 5 ones, if it's returning less than 5 records, the order
 of the records had also be randomized. As the records in our dataset are holding address-data, we could easily show a Google-Map
-and generate markers of our 5 (or less) matches.
+and generate markers out of our 5 (or less) matches.
 
 The whole projects scope was covering 3 separate installations of Wordpress, and a application written in Ruby on Rails.
 So, to guarantee good performance for all of this, I decided to use a vServer with 4 Gigs of memory. This allowed me to
@@ -15,5 +15,3 @@ not responding to anything else... but it did not! Surprisingly, this was perfor
 
 And so I also implemented the remaining functionality of my search, including GoogleMaps-API and the randomized results...
 still surprised by the very good performance and a little proud that not even 1 request is hitting our server and with it the database.
-
-Wont believe me? Please see by yourself...
