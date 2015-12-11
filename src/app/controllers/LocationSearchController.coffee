@@ -1,4 +1,4 @@
-LocationSearchController = ($scope, $http, $filter) ->
+LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
   __construct = ->
     getData()
     navigator.geolocation.getCurrentPosition geoSuccessHandler
@@ -9,9 +9,18 @@ LocationSearchController = ($scope, $http, $filter) ->
   $scope.markers = []
   $scope.places = []
 
+  $scope.availableFilters = null
+
+  $scope.fields = []
+    
+  defaultFilters = ["Hauptkanzlei_Ort","Hauptkanzlei_PLZ","Name"]
+
   # Gets triggered on input-change
-  $scope.filterPlaces = ->
-    fields = ["Hauptkanzlei_Ort","Hauptkanzlei_PLZ","Name"]
+  $scope.filterPlaces = (field) ->
+    activeFields = $scope.fields.filter (item) -> item.checked
+    fields = []
+    for activeField in activeFields
+      fields.push activeField.label
     if $scope.search.length < 2
       $scope.results = []
     else
@@ -86,11 +95,17 @@ LocationSearchController = ($scope, $http, $filter) ->
       center: $scope.initialCenter
     $scope.map = new google.maps.Map document.getElementById("gmapSearchContainer"), mapOptions
 
+  $scope.toggleSidenav = -> $mdSidenav("left").toggle()
+
   # get the data
   getData = ->
     $http
       .get "data/mitglieder.json"
       .success (d) ->
+        for key,value of d[0]
+          $scope.fields.push
+            label: key
+            checked: if defaultFilters.indexOf(key) >= 0  then true else false
         $scope.places = d
 
   __construct()

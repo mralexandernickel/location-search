@@ -1,11 +1,34 @@
-<input id="gmapSearch" type="text" ng-model="search" ng-model-options="{debounce: 300}" ng-change="filterPlaces()" placeholder="Search...">
-<ul id="gmapSearchResults" ng-if="results.length > 0">
-  <li ng-repeat="place in results">
-    <address>
-      <strong>{{place.Name_Titel_Beruf}}</strong><br>
-      {{place.Hauptkanzlei_Strasse}}<br>
-      {{place.Hauptkanzlei_PLZ}} {{place.Hauptkanzlei_Ort}}
-    </address>
-  </li>
-</ul>
-<div id="gmapSearchContainer"></div>
+<md-sidenav class="md-sidenav-left md-whiteframe-z2 sidenav-filter" md-component-id="left">
+    <md-tabs md-stretch-tabs="always" flex md-align-tabs="bottom">
+      <md-tab>
+        <md-tab-label>
+          <span>One</span>
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <md-switch class="md-primary" ng-repeat="field in fields"
+                       ng-model="field.checked"
+                       aria-label="{{field.label}}">{{field.label}}</md-switch>
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+    </md-tabs>
+</md-sidenav>
+<md-content flex layout-padding>
+  <md-button class="md-icon-button" ng-click="toggleSidenav()">
+    <md-icon class="mdi" md-font-icon="mdi-menu"></md-icon>
+  </md-button>
+  <input id="gmapSearch" type="text" ng-model="search" ng-model-options="{debounce: 700}" ng-change="filterPlaces()" placeholder="Search...">
+  <div id="gmapSearchContainer"></div>
+</md-content>
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="results.length > 0">
+  <md-content layout-padding>
+    <md-card ng-repeat="place in results">
+      <md-card-content>
+        <h2 class="md-title">{{place.Name_Titel_Beruf}}</h2>
+        <p class="md-body-1">{{place.Hauptkanzlei_Strasse}}<br>
+        {{place.Hauptkanzlei_PLZ}} {{place.Hauptkanzlei_Ort}}</p>
+      <md-card-content>
+    </md-card>
+  </md-content>
+</md-sidenav>
