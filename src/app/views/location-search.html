@@ -2,7 +2,17 @@
     <md-tabs md-stretch-tabs="always" flex md-align-tabs="bottom">
       <md-tab>
         <md-tab-label>
-          <span>One</span>
+        <span><md-icon md-font-icon="mdi-magnify" class="mdi"></md-icon></span>
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <h2>First Tab</h2>
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+      <md-tab>
+        <md-tab-label>
+        <span><md-icon md-font-icon="mdi-filter-variant" class="mdi"></md-icon></span>
         </md-tab-label>
         <md-tab-body>
           <md-content class="md-padding">
@@ -23,7 +33,9 @@
 </md-content>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="results.length > 0">
   <md-content layout-padding>
-    <md-card ng-repeat="place in results">
+    <md-card ng-repeat="place in results | orderBy: cardOrder"
+             ng-click="setActive(place)"
+             ng-class="{active: place.active}">
       <md-card-content>
         <h2 class="md-title">{{place.Name_Titel_Beruf}}</h2>
         <p class="md-body-1">{{place.Hauptkanzlei_Strasse}}<br>

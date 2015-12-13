@@ -66,20 +66,40 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
       for place in $scope.results
         data =
           address: "#{place.Hauptkanzlei_Strasse} #{place.Hauptkanzlei_PLZ} #{place.Hauptkanzlei_Ort}"
-        geocoder.geocode data, ((results, status) ->
-          location = results[0].geometry.location
-          bounds.extend new google.maps.LatLng location.lat(), location.lng()
-          $scope.map.fitBounds bounds
-          $scope.map.setCenter bounds.getCenter()
-          marker = new google.maps.Marker
-            map: $scope.map
-            position: location
-          $scope.markers.push marker
-        ).bind(place)
+        ((item) ->
+          geocoder.geocode data, (results, status) ->
+            location = results[0].geometry.location
+            bounds.extend new google.maps.LatLng location.lat(), location.lng()
+            $scope.map.fitBounds bounds
+            $scope.map.setCenter bounds.getCenter()
+            marker = new google.maps.Marker
+              map: $scope.map
+              position: location
+            item.marker = marker
+            marker.addListener "click", ->
+              for m in $scope.markers
+                m.setAnimation null
+              for i in $scope.places
+                i.active = false
+              item.active = true
+              @setAnimation google.maps.Animation.BOUNCE
+              $scope.$apply()
+            $scope.markers.push marker
+        )(place)
     else
       clearMarkers()
       $scope.map.setZoom $scope.initialZoom
       $scope.map.setCenter $scope.initialCenter
+
+  $scope.cardOrder = null
+
+  $scope.setActive = (place) ->
+    for marker in $scope.markers
+      marker.setAnimation null
+    for i in $scope.places
+      i.active = false
+    place.active = true
+    place.marker.setAnimation google.maps.Animation.BOUNCE
 
   # get geolocation of user
   geoSuccessHandler = (position) ->

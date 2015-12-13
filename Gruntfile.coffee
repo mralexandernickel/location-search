@@ -9,6 +9,7 @@ module.exports = (grunt) ->
         files:
           "<%= assets_path %>/app/app.js": ["<%= src_path %>/app/app.coffee"]
           "<%= assets_path %>/app/controllers.js": ["<%= src_path %>/app/controllers/*.coffee"]
+          "<%= assets_path %>/app/directives.js": ["<%= src_path %>/app/directives/*.coffee"]
           "<%= assets_path %>/app/config.js": ["<%= src_path %>/app/config/*.coffee"]
     sass:
       options:
