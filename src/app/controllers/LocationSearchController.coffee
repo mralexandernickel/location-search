@@ -12,8 +12,20 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
   $scope.availableFilters = null
 
   $scope.fields = []
-    
-  defaultFilters = ["Hauptkanzlei_Ort","Hauptkanzlei_PLZ","Name"]
+  
+  $scope.dataUrl = "data/mitglieder.json"
+
+  $scope.addressFields =
+    name: "Name_Titel_Beruf"
+    street: "Hauptkanzlei_Strasse"
+    zip: "Hauptkanzlei_PLZ"
+    city: "Hauptkanzlei_Ort"
+
+  defaultFilters = [
+    $scope.addressFields.city,
+    $scope.addressFields.zip,
+    $scope.addressFields.name
+  ]
 
   # Gets triggered on input-change
   $scope.filterPlaces = (field) ->
@@ -65,7 +77,7 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
       # add markers
       for place in $scope.results
         data =
-          address: "#{place.Hauptkanzlei_Strasse} #{place.Hauptkanzlei_PLZ} #{place.Hauptkanzlei_Ort}"
+          address: "#{place[$scope.addressFields.street]} #{place[$scope.addressFields.zip]} #{place[$scope.addressFields.city]}"
         ((item) ->
           geocoder.geocode data, (results, status) ->
             location = results[0].geometry.location
@@ -79,7 +91,7 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
             marker.addListener "click", ->
               for m in $scope.markers
                 m.setAnimation null
-              for i in $scope.places
+              for i in $scope.results
                 i.active = false
               item.active = true
               @setAnimation google.maps.Animation.BOUNCE
@@ -93,6 +105,8 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
 
   $scope.cardOrder = null
 
+  $scope.setInactive = (place) -> place.active = false
+
   $scope.setActive = (place) ->
     for marker in $scope.markers
       marker.setAnimation null
@@ -103,8 +117,26 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
 
   # get geolocation of user
   geoSuccessHandler = (position) ->
+    $scope.userLat = position.coords.latitude
+    $scope.userLong = position.coords.longitude
     $scope.initialCenter = new google.maps.LatLng position.coords.latitude, position.coords.longitude
     renderMap()
+
+  # calculate distance
+  distance = (lat1, lon1, lat2, lon2, unit) ->
+    radlat1 = Math.PI * lat1 / 180
+    radlat2 = Math.PI * lat2 / 180
+    theta = lon1 - lon2
+    radtheta = Math.PI * theta / 180
+    dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if unit == "K"
+      dist = dist * 1.609344
+    if unit == "N"
+      dist = dist * 0.8684
+    return dist
   
   # render map for the first time
   renderMap = ->
@@ -120,7 +152,7 @@ LocationSearchController = ($scope, $http, $filter, $mdSidenav) ->
   # get the data
   getData = ->
     $http
-      .get "data/mitglieder.json"
+      .get $scope.dataUrl
       .success (d) ->
         for key,value of d[0]
           $scope.fields.push

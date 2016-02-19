@@ -37,9 +37,10 @@
              ng-click="setActive(place)"
              ng-class="{active: place.active}">
       <md-card-content>
-        <h2 class="md-title">{{place.Name_Titel_Beruf}}</h2>
-        <p class="md-body-1">{{place.Hauptkanzlei_Strasse}}<br>
-        {{place.Hauptkanzlei_PLZ}} {{place.Hauptkanzlei_Ort}}</p>
+        <md-button class="md-raised" ng-if="place.active" ng-click="setInactive(place)">Close</md-button>
+        <h2 class="md-title">{{place[addressFields.name]}}</h2>
+        <p class="md-body-1">{{place[addressFields.street]}}<br>
+        {{place[addressFields.zip]}} {{place[addressFields.city]}}</p>
       <md-card-content>
     </md-card>
   </md-content>
