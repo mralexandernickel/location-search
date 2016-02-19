@@ -1,1 +1,1 @@
-window.app = angular.module "location-search", ["ngRoute","ngMaterial"]
+window.app = angular.module "location-search", ["ngMaterial"]
