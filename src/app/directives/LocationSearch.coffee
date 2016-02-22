@@ -7,35 +7,47 @@ LocationSearch = ($http, $filter, $mdSidenav) ->
       fieldStreet: "@fieldStreet"
       fieldZip: "@fieldZip"
       fieldCity: "@fieldCity"
+      initialFilters: "@initialFilters"
+      maxResults: "@maxResults"
+      initialZoom: "@initialZoom"
+    
     link: ($scope, elem, attrs) ->
       __construct = ->
-        console.log $scope.resourceUrl
+        setVariables()
         getData()
+
+      #
+      # set and format needed attributes
+      #
+      setVariables = ->
         navigator.geolocation.getCurrentPosition geoSuccessHandler
+        $scope.initialFilters = $scope.initialFilters.replace(/ +(?= )/g, "").split(" ")
+        $scope.maxResults = $scope.maxResults or 5
+        $scope.initialZoom = $scope.initialZoom or 8
+        $scope.results = []
+        $scope.markers = []
+        $scope.places = []
 
-      $scope.maxResults = 5
-      $scope.initialZoom = 8
-      $scope.results = []
-      $scope.markers = []
-      $scope.places = []
+        $scope.availableFilters = null
 
-      $scope.availableFilters = null
+        $scope.fields = []
 
-      $scope.fields = []
+        $scope.addressFields =
+          name: $scope.fieldName
+          street: $scope.fieldStreet
+          zip: $scope.fieldZip
+          city: $scope.fieldCity
 
-      $scope.addressFields =
-        name: $scope.fieldName
-        street: $scope.fieldStreet
-        zip: $scope.fieldZip
-        city: $scope.fieldCity
+        defaultFilters = [
+          $scope.addressFields.city,
+          $scope.addressFields.zip,
+          $scope.addressFields.name
+        ]
+        $scope.defaultFilters = $scope.initialFilters or defaultFilters
 
-      defaultFilters = [
-        $scope.addressFields.city,
-        $scope.addressFields.zip,
-        $scope.addressFields.name
-      ]
-
+      #
       # Gets triggered on input-change
+      #
       $scope.filterPlaces = (field) ->
         activeFields = $scope.fields.filter (item) -> item.checked
         fields = []
@@ -72,11 +84,17 @@ LocationSearch = ($http, $filter, $mdSidenav) ->
           i--
         array.slice 0, $scope.maxResults
 
+      #
+      # remove markers from map
+      #
       clearMarkers = ->
         for marker in $scope.markers
           marker.setMap null
         $scope.markers = []
 
+      #
+      # update map and add markers
+      #
       updateMap = ->
         if $scope.results.length > 0
           bounds = new google.maps.LatLngBounds
@@ -165,10 +183,11 @@ LocationSearch = ($http, $filter, $mdSidenav) ->
             for key,value of d[0]
               $scope.fields.push
                 label: key
-                checked: if defaultFilters.indexOf(key) >= 0  then true else false
+                checked: if $scope.defaultFilters.indexOf(key) >= 0  then true else false
             $scope.places = d
 
       __construct()
+
     template:
       """
       <md-sidenav class="md-sidenav-left md-whiteframe-z2 sidenav-filter" md-component-id="left">
