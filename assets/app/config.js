@@ -1,11 +1,6 @@
 (function() {
-  app.config(function($routeProvider) {
-    return $routeProvider.when("/", {
-      controller: "LocationSearchController",
-      templateUrl: "assets/app/views/location-search.html"
-    }).otherwise({
-      redirectTo: "/"
-    });
+  app.config(function($mdThemingProvider) {
+    return $mdThemingProvider.theme("dark-theme").primaryPalette("yellow").dark();
   });
 
 }).call(this);
