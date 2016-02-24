@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html ng-app="location-search">
+<html ng-app="demoApp">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1">
     <title>Location Search</title>
-    <link rel="stylesheet" href="assets/css/materialdesignicons.min.css"></link>
-    <link rel="stylesheet" href="assets/lib/angular/angular-material.min.css"></link>
-    <link rel="stylesheet" href="assets/css/location-search.css"></link>
+    <link rel="stylesheet" href="assets/lib/mdi/css/materialdesignicons.min.css"></link>
+    <link rel="stylesheet" href="assets/lib/angular-material/angular-material.min.css"></link>
+    <link rel="stylesheet" href="assets/lib/location-search/dist/location-search.min.css"></link>
+    <style>
+      html {
+        height: 100%;
+      }
+      html body {
+        min-height: 100%;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
   </head>
-  <body layout="column" ng-controller="ApplicationController">
+  <body layout="column">
     <location-search
       layout="row"
       flex
@@ -22,12 +33,10 @@
       initial-filters="name zip city"></location-search>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src="assets/lib/angular/angular.min.js"></script>
-    <script src="assets/lib/angular/angular-animate.min.js"></script>
-    <script src="assets/lib/angular/angular-aria.min.js"></script>
-    <script src="assets/lib/angular/angular-material.min.js"></script>
-    <script src="assets/app/app.js"></script>
-    <script src="assets/app/config.js"></script>
-    <script src="assets/app/directives.js"></script>
-    <script src="assets/app/controllers.js"></script>
+    <script src="assets/lib/angular-animate/angular-animate.min.js"></script>
+    <script src="assets/lib/angular-aria/angular-aria.min.js"></script>
+    <script src="assets/lib/angular-material/angular-material.min.js"></script>
+    <script src="assets/lib/location-search/dist/location-search.min.js"></script>
+    <script>angular.module("demoApp", ["nickel.locationSearch"])</script>
   </body>
 </html>
