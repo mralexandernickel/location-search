@@ -5,6 +5,9 @@ module.exports = (grunt) ->
     src_path: "src"
     assets_path: "public/assets"
     coffee:
+      dist:
+        files:
+          "dist/<%= pkg.name %>.js": "<%= src_path %>/coffee/LocationSearch.coffee"
       compile:
         files:
           "<%= assets_path %>/app/app.js": ["<%= src_path %>/app/app.coffee"]
@@ -19,7 +22,7 @@ module.exports = (grunt) ->
         ]
       dist:
         files:
-          "<%= assets_path %>/css/<%= pkg.name %>.css": "<%= src_path %>/sass/application.sass"
+          "dist/<%= pkg.name %>.css": "<%= src_path %>/sass/location-search.sass"
     copy:
       images:
         files: [
@@ -45,21 +48,21 @@ module.exports = (grunt) ->
         ]
     autoprefixer:
       single_file:
-        src: "<%= assets_path %>/css/<%= pkg.name %>.css"
-        dest: "<%= assets_path %>/css/<%= pkg.name %>.prefixed.css"
+        src: "dist/<%= pkg.name %>.css"
+        dest: "dist/<%= pkg.name %>.prefixed.css"
     uglify:
       options:
         mangle: false
       target:
         files:
-          "<%= assets_path %>/js/<%= pkg.name %>.min.js": ["<%= assets_path %>/js/<%= pkg.name %>.js"]
+          "dist/<%= pkg.name %>.min.js": ["dist/<%= pkg.name %>.js"]
     cssmin:
       target:
         files: [
           expand: true
-          cwd: "<%= assets_path %>/css"
+          cwd: "dist"
           src: ["*.prefixed.css", "!*.min.css"]
-          dest: "<%= assets_path %>/css"
+          dest: "dist"
           ext: ".min.css"
         ]
   
@@ -72,3 +75,4 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-autoprefixer"
 
   grunt.registerTask "default", ["coffee","sass","copy"]
+  grunt.registerTask "dist",["coffee:dist", "uglify", "sass:dist", "autoprefixer", "cssmin"]

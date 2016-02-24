@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-wget http://de.wordpress.org/latest-de_DE.zip 
-unzip latest-de_DE.zip
-rm latest-de_DE.zip
-cp -r wordpress/** public  
-rm -rf wordpress

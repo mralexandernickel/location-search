@@ -1,0 +1,37 @@
+{
+  "name": "location-search",
+  "description": "Angular Directive for a Fullscreen Location-Search",
+  "main": "dist/location-search.min.js",
+  "authors": [
+    "Alexander Nickel <mr.alexander.nickel@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "location",
+    "search",
+    "coordinates",
+    "poi"
+  ],
+  "homepage": "https://mralexandernickel.github.io/location-search",
+  "moduleType": [
+    "globals"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/assets/lib",
+    "public",
+    "src",
+    "test",
+    "tests",
+    "PROJECT.md",
+    "thumbnail.png",
+    "Gruntfile.coffee"
+  ],
+  "dependencies": {
+    "angular-route": "~1.4.7",
+    "angular-material": "~1.0.5",
+    "mdi": "~1.4.57"
+  }
+}
