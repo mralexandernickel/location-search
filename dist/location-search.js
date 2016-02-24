@@ -17,7 +17,7 @@
         fallbackCenter: "@fallbackCenter"
       },
       link: function($scope, elem, attrs) {
-        var __construct, clearMarkers, distance, filterNearby, geoSuccessHandler, getCoordinates, getData, getDefaultLatLon, renderMap, setVariables, shuffle, updateMap;
+        var __construct, clearMarkers, distance, filterNearby, geoSuccessHandler, getData, getDefaultLatLon, renderMap, setVariables, shuffle, updateMap;
         __construct = function() {
           getDefaultLatLon();
           setVariables();
@@ -240,19 +240,6 @@
             return renderMap();
           });
         };
-        getCoordinates = function() {
-          return console.log($scope.places.length);
-
-          /*
-          for place in $scope.places[..200]
-            data =
-              address: "#{place[$scope.addressFields.street]} #{place[$scope.addressFields.zip]} #{place[$scope.addressFields.city]}"
-            geocoder.geocode data, (results, status) ->
-              console.log status
-              console.log results
-              location = results[0].geometry.location
-           */
-        };
         getData = function() {
           return $http.get($scope.resourceUrl).success(function(d) {
             var key, ref, value;
@@ -264,8 +251,7 @@
                 checked: $scope.defaultFilters.indexOf(key) >= 0 ? true : false
               });
             }
-            $scope.places = d;
-            return getCoordinates();
+            return $scope.places = d;
           });
         };
         return __construct();

@@ -206,20 +206,6 @@ LocationSearch = ($http, $filter, $mdSidenav) ->
           $scope.initialCenter = new google.maps.LatLng location.lat(), location.lng()
           renderMap()
 
-      # get coordinates of places
-      getCoordinates = ->
-        console.log $scope.places.length
-        #geocoder = new google.maps.Geocoder
-        ###
-        for place in $scope.places[..200]
-          data =
-            address: "#{place[$scope.addressFields.street]} #{place[$scope.addressFields.zip]} #{place[$scope.addressFields.city]}"
-          geocoder.geocode data, (results, status) ->
-            console.log status
-            console.log results
-            location = results[0].geometry.location
-        ###
-
       # get the data
       getData = ->
         $http
@@ -230,7 +216,6 @@ LocationSearch = ($http, $filter, $mdSidenav) ->
                 label: key
                 checked: if $scope.defaultFilters.indexOf(key) >= 0  then true else false
             $scope.places = d
-            getCoordinates()
 
       __construct()
 
