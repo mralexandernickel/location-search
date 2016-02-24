@@ -22,7 +22,7 @@ html {
   margin: 0;
   padding: 0; }
 
-#gmapSearchContainer {
+location-search #gmapSearchContainer {
   position: absolute;
   top: 0;
   right: 0;
@@ -30,14 +30,21 @@ html {
   left: 0;
   z-index: 1; }
 
-.md-button {
+location-search .md-button.toggleSidenav {
   position: fixed;
   top: 35px;
-  left: 290px;
+  left: 340px;
   z-index: 3;
   font-size: 19px; }
 
-#gmapSearch {
+location-search .md-button.getPosition {
+  position: fixed;
+  top: 35px;
+  left: 310px;
+  z-index: 3;
+  font-size: 19px; }
+
+location-search #gmapSearch {
   position: absolute;
   top: 40px;
   left: 40px;
@@ -49,12 +56,12 @@ html {
   height: 30px;
   border: none;
   outline: none;
-  width: 300px; }
+  width: 350px; }
 
-md-card.active {
+location-search md-card.active {
   background: red; }
 
-.sidenav-filter md-tabs {
+location-search .sidenav-filter md-tabs {
   position: static; }
 
 /*# sourceMappingURL=location-search.css.map */

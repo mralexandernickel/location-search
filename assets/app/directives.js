@@ -13,25 +13,27 @@
         fieldCity: "@fieldCity",
         initialFilters: "@initialFilters",
         maxResults: "@maxResults",
-        initialZoom: "@initialZoom"
+        initialZoom: "@initialZoom",
+        fallbackCenter: "@fallbackCenter"
       },
       link: function($scope, elem, attrs) {
-        var __construct, clearMarkers, distance, geoSuccessHandler, getData, renderMap, setVariables, shuffle, updateMap;
+        var __construct, clearMarkers, distance, filterNearby, geoSuccessHandler, getCoordinates, getData, getDefaultLatLon, renderMap, setVariables, shuffle, updateMap;
         __construct = function() {
+          getDefaultLatLon();
           setVariables();
           return getData();
         };
         setVariables = function() {
           var defaultFilters;
-          navigator.geolocation.getCurrentPosition(geoSuccessHandler);
           $scope.initialFilters = $scope.initialFilters.replace(/ +(?= )/g, "").split(" ");
           $scope.maxResults = $scope.maxResults || 5;
           $scope.initialZoom = $scope.initialZoom || 8;
-          console.log($scope.maxResults);
+          $scope.radius = $scope.initialRadius || 0;
           $scope.results = [];
           $scope.markers = [];
           $scope.places = [];
           $scope.availableFilters = null;
+          $scope.availableRadii = [0, 10, 25, 50, 100];
           $scope.fields = [];
           $scope.addressFields = {
             name: $scope.fieldName,
@@ -42,8 +44,11 @@
           defaultFilters = [$scope.addressFields.city, $scope.addressFields.zip, $scope.addressFields.name];
           return $scope.defaultFilters = $scope.initialFilters || defaultFilters;
         };
+        $scope.getUserPosition = function() {
+          return navigator.geolocation.getCurrentPosition(geoSuccessHandler, getDefaultLatLon);
+        };
         $scope.filterPlaces = function(field) {
-          var activeField, activeFields, fields, filterArgs, k, len, result;
+          var activeField, activeFields, fields, filterByTerm, k, len, result;
           activeFields = $scope.fields.filter(function(item) {
             return item.checked;
           });
@@ -55,7 +60,7 @@
           if ($scope.search.length < 2) {
             $scope.results = [];
           } else {
-            filterArgs = function(item) {
+            filterByTerm = function(item) {
               var chunk, chunks, l, len1, len2, n, property, result;
               result = false;
               chunks = $scope.search.split(" ");
@@ -72,9 +77,24 @@
               }
               return result;
             };
-            result = $filter("filter")($scope.places, filterArgs);
+            result = $filter("filter")($scope.places, filterByTerm);
+            if ($scope.radius > 0) {
+              result = filterNearby(result);
+            }
             $scope.results = shuffle(result);
           }
+          return updateMap();
+        };
+        filterNearby = function(places) {
+          var filterByDistance, result;
+          filterByDistance = function(item) {
+            return distance($scope.userLat, $scope.userLon, item.latitude, item.longitude, "K") <= $scope.radius;
+          };
+          result = $filter("filter")(places, filterByDistance);
+          return result;
+        };
+        $scope.getNearby = function() {
+          $scope.results = shuffle(filterNearby($scope.places));
           return updateMap();
         };
         shuffle = function(array) {
@@ -171,8 +191,9 @@
         };
         geoSuccessHandler = function(position) {
           $scope.userLat = position.coords.latitude;
-          $scope.userLong = position.coords.longitude;
+          $scope.userLon = position.coords.longitude;
           $scope.initialCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          $scope.$apply();
           return renderMap();
         };
         distance = function(lat1, lon1, lat2, lon2, unit) {
@@ -206,6 +227,32 @@
         $scope.toggleSidenav = function() {
           return $mdSidenav("left").toggle();
         };
+        getDefaultLatLon = function() {
+          var data, geocoder;
+          geocoder = new google.maps.Geocoder;
+          data = {
+            address: $scope.fallbackCenter
+          };
+          return geocoder.geocode(data, function(results, status) {
+            var location;
+            location = results[0].geometry.location;
+            $scope.initialCenter = new google.maps.LatLng(location.lat(), location.lng());
+            return renderMap();
+          });
+        };
+        getCoordinates = function() {
+          return console.log($scope.places.length);
+
+          /*
+          for place in $scope.places[..200]
+            data =
+              address: "#{place[$scope.addressFields.street]} #{place[$scope.addressFields.zip]} #{place[$scope.addressFields.city]}"
+            geocoder.geocode data, (results, status) ->
+              console.log status
+              console.log results
+              location = results[0].geometry.location
+           */
+        };
         getData = function() {
           return $http.get($scope.resourceUrl).success(function(d) {
             var key, ref, value;
@@ -217,12 +264,13 @@
                 checked: $scope.defaultFilters.indexOf(key) >= 0 ? true : false
               });
             }
-            return $scope.places = d;
+            $scope.places = d;
+            return getCoordinates();
           });
         };
         return __construct();
       },
-      template: "<md-sidenav class=\"md-sidenav-left md-whiteframe-z2 sidenav-filter\" md-component-id=\"left\">\n    <md-tabs md-stretch-tabs=\"always\" flex md-align-tabs=\"bottom\">\n      <md-tab>\n        <md-tab-label>\n        <span><md-icon md-font-icon=\"mdi-magnify\" class=\"mdi\"></md-icon></span>\n        </md-tab-label>\n        <md-tab-body>\n          <md-content class=\"md-padding\">\n            <h2>First Tab</h2>\n          </md-content>\n        </md-tab-body>\n      </md-tab>\n      <md-tab>\n        <md-tab-label>\n        <span><md-icon md-font-icon=\"mdi-filter-variant\" class=\"mdi\"></md-icon></span>\n        </md-tab-label>\n        <md-tab-body>\n          <md-content class=\"md-padding\">\n            <md-switch class=\"md-primary\" ng-repeat=\"field in fields\"\n                       ng-model=\"field.checked\"\n                       aria-label=\"{{field.label}}\">{{field.label}}</md-switch>\n          </md-content>\n        </md-tab-body>\n      </md-tab>\n    </md-tabs>\n</md-sidenav>\n<md-content flex layout-padding>\n  <md-button class=\"md-icon-button\" ng-click=\"toggleSidenav()\">\n    <md-icon class=\"mdi\" md-font-icon=\"mdi-menu\"></md-icon>\n  </md-button>\n  <input id=\"gmapSearch\" type=\"text\" ng-model=\"search\" ng-model-options=\"{debounce: 700}\" ng-change=\"filterPlaces()\" placeholder=\"Search...\">\n  <div id=\"gmapSearchContainer\"></div>\n</md-content>\n<md-sidenav class=\"md-sidenav-right md-whiteframe-z2\" md-component-id=\"right\" md-is-locked-open=\"results.length > 0\">\n  <md-content layout-padding>\n    <md-card ng-repeat=\"place in results | orderBy: cardOrder\"\n             ng-click=\"setActive(place)\"\n             ng-class=\"{active: place.active}\">\n      <md-card-content>\n        <md-button class=\"md-raised\" ng-if=\"place.active\" ng-click=\"setInactive(place)\">Close</md-button>\n        <h2 class=\"md-title\">{{place[addressFields.name]}}</h2>\n        <p class=\"md-body-1\">{{place[addressFields.street]}}<br>\n        {{place[addressFields.zip]}} {{place[addressFields.city]}}</p>\n      <md-card-content>\n    </md-card>\n  </md-content>\n</md-sidenav>"
+      template: "<md-sidenav class=\"md-sidenav-left md-whiteframe-z2 sidenav-filter\" md-component-id=\"left\">\n    <md-tabs md-stretch-tabs=\"always\" flex md-align-tabs=\"bottom\">\n      <md-tab>\n        <md-tab-label>\n          <span><md-icon md-font-icon=\"mdi-magnify\" class=\"mdi\"></md-icon></span>\n        </md-tab-label>\n        <md-tab-body>\n          <md-content class=\"md-padding\">\n            <h2 class=\"md-headline\">Search Nearby</h2>\n            <p class=\"md-body-1\" ng-if=\"!userLat\">We need your Location to enable Nearby-Search</p>\n            <md-button ng-click=\"getUserPosition()\" class=\"md-raised md-primary\" ng-if=\"!userLat\">Get Position</md-button>\n            <md-input-container class=\"md-block\">\n              <label>Radius</label>\n              <md-select\n                ng-model=\"radius\"\n                ng-value=\"radius\"\n                ng-disabled=\"!userLat\"\n                ng-change=\"getNearby()\">\n                <md-option ng-repeat=\"availableRadius in availableRadii\" value=\"{{availableRadius}}\">{{availableRadius}}</md-option>\n              </md-select>\n            </md-input-container>\n          </md-content>\n        </md-tab-body>\n      </md-tab>\n      <md-tab>\n        <md-tab-label>\n          <span><md-icon md-font-icon=\"mdi-filter-variant\" class=\"mdi\"></md-icon></span>\n        </md-tab-label>\n        <md-tab-body>\n          <md-content class=\"md-padding\">\n            <md-switch class=\"md-primary\" ng-repeat=\"field in fields\"\n                       ng-model=\"field.checked\"\n                       aria-label=\"{{field.label}}\">{{field.label}}</md-switch>\n          </md-content>\n        </md-tab-body>\n      </md-tab>\n    </md-tabs>\n</md-sidenav>\n<md-content flex layout-padding>\n  <md-button class=\"md-icon-button toggleSidenav\" ng-click=\"toggleSidenav()\">\n    <md-icon class=\"mdi\" md-font-icon=\"mdi-settings\"></md-icon>\n  </md-button>\n  <md-button class=\"md-icon-button getPosition\" ng-click=\"getUserPosition()\">\n    <md-icon class=\"mdi\" md-font-icon=\"mdi-crosshairs-gps\"></md-icon>\n  </md-button>\n  <input id=\"gmapSearch\" type=\"text\" ng-model=\"search\" ng-model-options=\"{debounce: 700}\" ng-change=\"filterPlaces()\" placeholder=\"Search...\">\n  <div id=\"gmapSearchContainer\"></div>\n</md-content>\n<md-sidenav class=\"md-sidenav-right md-whiteframe-z2\" md-component-id=\"right\" md-is-locked-open=\"results.length > 0\">\n  <md-content layout-padding>\n    <md-card ng-repeat=\"place in results | orderBy: cardOrder\"\n             ng-click=\"setActive(place)\"\n             ng-class=\"{active: place.active}\">\n      <md-card-content>\n        <md-button class=\"md-raised\" ng-if=\"place.active\" ng-click=\"setInactive(place)\">Close</md-button>\n        <h2 class=\"md-title\">{{place[addressFields.name]}}</h2>\n        <p class=\"md-body-1\">{{place[addressFields.street]}}<br>\n        {{place[addressFields.zip]}} {{place[addressFields.city]}}</p>\n      <md-card-content>\n    </md-card>\n  </md-content>\n</md-sidenav>"
     };
   };
 
