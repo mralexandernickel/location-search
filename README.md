@@ -33,4 +33,4 @@ Load Google-Maps APIv3 and this Module inside your DOM, set this Module as depen
       initial-filters="name zip city"></location-search>
 
 The attributes "resource-url", "field-name", "field-street" and "field-city" are obligatory.
-The attributes "max-results", "initial-zoom" and "initial-filters" are optiobnal, and have the values shown above as defaults.
+The attributes "max-results", "initial-zoom" and "initial-filters" are optional, and have the values shown above as defaults.
