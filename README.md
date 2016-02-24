@@ -13,7 +13,7 @@ Have Fun!
 
 The easiest way is to install via bower:
 
-    bower install location-search
+    bower install nickel.locationSearch
 
 
 ## How to use

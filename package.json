@@ -1,6 +1,6 @@
 {
-  "name": "location-search",
-  "version": "0.0.1",
+  "name": "nickel.locationSearch",
+  "version": "0.6.1",
   "description": "Pull this Repository and run this command from your terminal (after you cd'ed into your project)",
   "main": "public/index.html",
   "scripts": {

@@ -1,5 +1,5 @@
 {
-  "name": "location-search",
+  "name": "nickel.locationSearch",
   "description": "Angular Directive for a Fullscreen Location-Search",
   "main": "dist/location-search.min.js",
   "authors": [
