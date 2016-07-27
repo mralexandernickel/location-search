@@ -30,7 +30,6 @@
     "Gruntfile.coffee"
   ],
   "dependencies": {
-    "angular-material": "~1.0.5",
-    "mdi": "~1.4.57"
+    "angular": "~1.4.12",
   }
 }
