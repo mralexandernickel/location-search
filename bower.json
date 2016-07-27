@@ -30,6 +30,6 @@
     "Gruntfile.coffee"
   ],
   "dependencies": {
-    "angular": "~1.4.12",
+    "angular": "~1.4.12"
   }
 }
