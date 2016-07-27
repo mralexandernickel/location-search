@@ -6,7 +6,7 @@
     <title>Location Search</title>
     <link rel="stylesheet" href="assets/lib/mdi/css/materialdesignicons.min.css"></link>
     <link rel="stylesheet" href="assets/lib/angular-material/angular-material.min.css"></link>
-    <link rel="stylesheet" href="assets/lib/location-search/dist/location-search.min.css"></link>
+    <link rel="stylesheet" href="assets/lib/location-search/dist/nickel.locationSearch.css"></link>
     <style>
       html {
         height: 100%;
@@ -36,20 +36,21 @@
     <location-search
       layout="row"
       flex
-      resource-url="data/salons.json"
+      resource-url="https://www.labiosthetique.de/cms/index.php?id=1&type=229"
       field-name="name"
       field-street="address"
       field-zip="zip"
       field-city="city"
       fallback-center="Gülichstraße 1-5 75179 Pforzheim"
+      map-style="style3"
       max-results="5"
-      initial-filters="name zip city"></location-search>
+      initial-filters="name zip address city"></location-search>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src="assets/lib/angular/angular.min.js"></script>
     <script src="assets/lib/angular-animate/angular-animate.min.js"></script>
     <script src="assets/lib/angular-aria/angular-aria.min.js"></script>
     <script src="assets/lib/angular-material/angular-material.min.js"></script>
-    <script src="assets/lib/location-search/dist/location-search.min.js"></script>
-    <script>angular.module("demoApp", ["nickel.locationSearch"])</script>
+    <script src="assets/lib/location-search/dist/nickel.locationSearch.js"></script>
+    <script>angular.module("demoApp", ["nickel.locationSearch", "ngMaterial"])</script>
   </body>
 </html>
