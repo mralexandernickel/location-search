@@ -8,12 +8,9 @@ module.exports = (grunt) ->
       dist:
         files:
           "dist/<%= pkg.name %>.js": "<%= src_path %>/coffee/LocationSearch.coffee"
-      compile:
+      dev:
         files:
-          "<%= assets_path %>/app/app.js": ["<%= src_path %>/app/app.coffee"]
-          "<%= assets_path %>/app/controllers.js": ["<%= src_path %>/app/controllers/*.coffee"]
-          "<%= assets_path %>/app/directives.js": ["<%= src_path %>/app/directives/*.coffee"]
-          "<%= assets_path %>/app/config.js": ["<%= src_path %>/app/config/*.coffee"]
+          "<%= assets_path %>/lib/location-search/dist/<%= pkg.name %>.js": "<%= src_path %>/coffee/LocationSearch.coffee"
     sass:
       options:
         sourceMap: true
@@ -57,15 +54,10 @@ module.exports = (grunt) ->
         files:
           "dist/<%= pkg.name %>.min.js": ["dist/<%= pkg.name %>.js"]
     cssmin:
-      target:
-        files: [
-          expand: true
-          cwd: "dist"
-          src: ["*.prefixed.css", "!*.min.css"]
-          dest: "dist"
-          ext: ".min.css"
-        ]
-  
+      dist:
+        src: "dist/<%= pkg.name %>.prefixed.css"
+        dest: "dist/<%= pkg.name %>.min.css"
+
   grunt.loadNpmTasks "grunt-sass"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-concat"
